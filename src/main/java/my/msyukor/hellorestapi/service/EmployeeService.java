@@ -1,6 +1,7 @@
 package my.msyukor.hellorestapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +15,26 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepo;
 	
-	public void save() {
-		
+	public void save(Employee employee) {
+		employeeRepo.save(employee);
 	}
 	
 	public List<Employee> getAllEmployees() {
-		return null;
+		return employeeRepo.findAll();
 		
 	}
 	
 	public Employee getEmployee(int employeeId) {
-		return null;
+		Employee searchedEmployee = null;
+		Optional<Employee> currentEmployee = employeeRepo.findById(employeeId);
+		if (currentEmployee.isPresent()) {
+			searchedEmployee = currentEmployee.get();
+		}
+		else {
+			throw new RuntimeException("COuld not find employee with ID " + employeeId);
+		}
 		
+		return searchedEmployee;
 	}
 	
 	public void deleteEmployee(int employeeId) {
